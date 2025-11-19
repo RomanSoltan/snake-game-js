@@ -1,13 +1,30 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>snake-game-js</title>
+    <title>Snake Game</title>
+    <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
-    <div id="app"></div>
+    <div>
+      <div class="scores">
+        <h1 id="score">000</h1>
+        <h2 id="higtScore">000</h2>
+      </div>
+      <div class="game-border-1">
+        <div class="game-border-2">
+          <div class="game-border-3">
+            <div id="game-board"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 id="instruction-text">Press spacebar to start the game</h2>
+    <img src="/src/snake-game-ai-gen.png" alt="snake logo" />
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
