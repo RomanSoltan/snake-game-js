@@ -4,14 +4,20 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
+      rel="stylesheet"
+    />
     <title>Snake Game</title>
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
     <div>
-      <div class="scores">
+      <div id="scores">
         <h1 id="score">000</h1>
-        <h2 id="higtScore">000</h2>
+        <h2 id="highScore">000</h2>
       </div>
       <div class="game-border-1">
         <div class="game-border-2">
@@ -23,7 +29,7 @@
     </div>
 
     <h2 id="instruction-text">Press spacebar to start the game</h2>
-    <img src="/src/snake-game-ai-gen.png" alt="snake logo" />
+    <img id="logo" src="/src/snake-game-ai-gen.png" alt="snake logo" />
 
     <script type="module" src="/src/main.js"></script>
   </body>
