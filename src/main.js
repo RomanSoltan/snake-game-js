@@ -173,7 +173,7 @@ function resetGame() {
   snake = [{ x: 10, y: 10 }];
   food = generateFood();
   direction = "right";
-  gameSpeedDelay = 200;
+  gameSpeedDelay = 500;
   updateScore();
 }
 
