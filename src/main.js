@@ -2,6 +2,7 @@
 const board = document.getElementById("game-board");
 const instructionText = document.getElementById("instruction-text");
 const logo = document.getElementById("logo");
+const score = document.getElementById("score");
 
 // Define game variables
 const gridSize = 20;
@@ -17,6 +18,7 @@ function draw() {
   board.innerHTML = "";
   drawSnake();
   drawFood();
+  updateScore();
 }
 
 // Draw snake
@@ -46,11 +48,9 @@ function setPosition(element, position) {
 
 // Draw food function
 function drawFood() {
-  if (gameStarted) {
-    const foodElement = createGameElement("div", "food");
-    setPosition(foodElement, food);
-    board.appendChild(foodElement);
-  }
+  const foodElement = createGameElement("div", "food");
+  setPosition(foodElement, food);
+  board.appendChild(foodElement);
 }
 
 // Generate food
@@ -83,10 +83,12 @@ function move() {
   // snake.pop();
 
   if (head.x === food.x && head.y === food.y) {
-    food === generateFood();
+    food = generateFood();
+    increaseSpeed();
     clearInterval(gameInterval); // Clear past interval
     gameInterval = setInterval(() => {
       move();
+      checkCollision();
       draw();
     }, gameSpeedDelay);
   } else {
@@ -107,7 +109,7 @@ function startGame() {
   logo.style.display = "none";
   gameInterval = setInterval(() => {
     move();
-    // checkCollision();
+    checkCollision();
     draw();
   }, gameSpeedDelay);
 }
@@ -139,4 +141,42 @@ function handleKeyPress(event) {
 
 document.addEventListener("keydown", handleKeyPress);
 
-// 1:13:21
+function increaseSpeed() {
+  console.log(gameSpeedDelay);
+  if (gameSpeedDelay > 150) {
+    gameSpeedDelay -= 5;
+  } else if (gameSpeedDelay > 100) {
+    gameSpeedDelay -= 3;
+  } else if (gameSpeedDelay > 50) {
+    gameSpeedDelay -= 2;
+  } else if (gameSpeedDelay > 25) {
+    gameSpeedDelay -= 1;
+  }
+}
+
+function checkCollision() {
+  const head = snake[0];
+
+  if (head.x < 1 || head.x > gridSize || head.y < 1 || head.y > gridSize) {
+    resetGame();
+  }
+
+  for (let i = 1; i < snake.length; i++) {
+    if (head.x === snake[i].x && head.y === snake[i].y) {
+      resetGame();
+    }
+  }
+}
+
+function resetGame() {
+  snake = [{ x: 10, y: 10 }];
+  food = generateFood();
+  direction = "right";
+  gameSpeedDelay = 200;
+  updateScore();
+}
+
+function updateScore() {
+  const currentScore = snake.length - 1;
+  score.textContent = currentScore.toString().padStart(3, "0");
+}
