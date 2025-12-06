@@ -12,7 +12,7 @@ let food = generateFood();
 let highScore = 0;
 let direction = "right";
 let gameInterval;
-let gameSpeedDelay = 500;
+let gameSpeedDelay = 800;
 let gameStarted = false;
 
 // Draw game map, snake, food
@@ -56,8 +56,13 @@ function drawFood() {
 
 // Generate food
 function generateFood() {
-  const x = Math.floor(Math.random() * gridSize) + 1;
-  const y = Math.floor(Math.random() * gridSize) + 1;
+  let x, y;
+  while (true) {
+    x = Math.floor(Math.random() * gridSize) + 1;
+    y = Math.floor(Math.random() * gridSize) + 1;
+    let isOnSnake = snake.some(point => point.x === x && point.y === y);
+    if (!isOnSnake) break;
+  }
   return { x, y };
 }
 
@@ -173,7 +178,7 @@ function resetGame() {
   snake = [{ x: 10, y: 10 }];
   food = generateFood();
   direction = "right";
-  gameSpeedDelay = 500;
+  gameSpeedDelay = 800;
   updateScore();
 }
 
