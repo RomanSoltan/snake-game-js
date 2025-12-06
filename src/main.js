@@ -14,6 +14,7 @@ let direction = "right";
 let gameInterval;
 let gameSpeedDelay = 800;
 let gameStarted = false;
+let isPaused = false;
 
 // Draw game map, snake, food
 function draw() {
@@ -68,6 +69,8 @@ function generateFood() {
 
 // Moving the snake
 function move() {
+  if (isPaused) return;
+
   const head = { ...snake[0] };
   switch (direction) {
     case "up":
@@ -103,6 +106,7 @@ function move() {
 // Start game function
 function startGame() {
   gameStarted = true; // Keep track of a running game
+  isPaused = false;
   instructionText.style.display = "none";
   logo.style.display = "none";
   gameInterval = setInterval(() => {
@@ -112,15 +116,43 @@ function startGame() {
   }, gameSpeedDelay);
 }
 
-// KeyPress event listener
-function handleKeyPress(event) {
-  if (
-    (!gameStarted && event.code === "Space") ||
-    (!gameStarted && event.key === " ")
-  ) {
-    startGame();
+// Toggle pause function
+function togglePause() {
+  if (!gameStarted) return;
+
+  if (!isPaused) {
+    isPaused = true;
+    clearInterval(gameInterval);
+    instructionText.textContent = "PAUSE (ESC)";
+    instructionText.style.display = "block";
   } else {
-    switch (event.key) {
+    isPaused = false;
+    instructionText.style.display = "none";
+    gameInterval = setInterval(() => {
+      move();
+      checkCollision();
+      draw();
+    }, gameSpeedDelay);
+  }
+}
+
+// KeyPress event listener
+function handleKeyPress(e) {
+  // Pause on ESC
+  if (e.key === "Escape") {
+    togglePause();
+    return;
+  }
+
+  //// Start game on space
+  if ((!gameStarted && e.code === "Space") || (!gameStarted && e.key === " ")) {
+    startGame();
+    return;
+  }
+
+  // Change direction (only if NOT paused)
+  if (!isPaused) {
+    switch (e.key) {
       case "ArrowUp":
         if (direction !== "down") direction = "up";
         break;
@@ -139,28 +171,21 @@ function handleKeyPress(event) {
 
 document.addEventListener("keydown", handleKeyPress);
 
-board.addEventListener("click", event => {
+board.addEventListener("click", e => {
   if (!gameStarted) {
-    event.stopPropagation();
+    e.stopPropagation();
     startGame();
   }
 });
 
 // Increase snake's speed
 function increaseSpeed() {
-  if (gameSpeedDelay > 400) {
-    gameSpeedDelay -= 10;
-  } else if (gameSpeedDelay > 300) {
-    gameSpeedDelay -= 5;
-  } else if (gameSpeedDelay > 200) {
-    gameSpeedDelay -= 4;
-  } else if (gameSpeedDelay > 100) {
-    gameSpeedDelay -= 3;
-  } else if (gameSpeedDelay > 50) {
-    gameSpeedDelay -= 2;
-  } else if (gameSpeedDelay > 25) {
-    gameSpeedDelay -= 1;
-  }
+  if (gameSpeedDelay > 400) gameSpeedDelay -= 10;
+  else if (gameSpeedDelay > 300) gameSpeedDelay -= 5;
+  else if (gameSpeedDelay > 200) gameSpeedDelay -= 4;
+  else if (gameSpeedDelay > 100) gameSpeedDelay -= 3;
+  else if (gameSpeedDelay > 50) gameSpeedDelay -= 2;
+  else if (gameSpeedDelay > 25) gameSpeedDelay -= 1;
 }
 
 // Check collision in game
@@ -199,6 +224,7 @@ function updateScore() {
 function stopGame() {
   clearInterval(gameInterval);
   gameStarted = false;
+  isPaused = false;
   instructionText.style.display = "block";
   logo.style.display = "block";
 }
