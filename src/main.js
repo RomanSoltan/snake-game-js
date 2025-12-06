@@ -139,6 +139,13 @@ function handleKeyPress(event) {
 
 document.addEventListener("keydown", handleKeyPress);
 
+board.addEventListener("click", event => {
+  if (!gameStarted) {
+    event.stopPropagation();
+    startGame();
+  }
+});
+
 // Increase snake's speed
 function increaseSpeed() {
   if (gameSpeedDelay > 400) {
