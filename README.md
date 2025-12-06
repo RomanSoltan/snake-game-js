@@ -2,7 +2,7 @@
 
 A retro game made in JavaScript.
 
-<!-- ![image of the game](./screenshot.png) -->
+![image of the game](./src/img/screenshot.png)
 
 Live demo : https://snake-game-js-seven-alpha.vercel.app/
 
