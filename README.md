@@ -4,6 +4,8 @@ A retro game made in JavaScript.
 
 ![image of the game](./src/img/screenshot.png)
 
+![image of the game](./src/img/screenshot-1.png)
+
 Live demo : https://snake-game-js-seven-alpha.vercel.app/
 
 How I learned to build this from tutorial :
