@@ -18,6 +18,13 @@ let isPaused = false;
 let touchStartX = 0;
 let touchStartY = 0;
 
+// Load high score on page load
+if (localStorage.getItem("snakeHighScore")) {
+  highScore = parseInt(localStorage.getItem("snakeHighScore"));
+  highScoreText.textContent = highScore.toString().padStart(3, "0");
+  highScoreText.style.display = "block";
+}
+
 // Draw game map, snake, food
 function draw() {
   board.innerHTML = "";
@@ -175,6 +182,7 @@ function handleKeyPress(e) {
 
 document.addEventListener("keydown", handleKeyPress);
 
+// Start game on click
 board.addEventListener("click", e => {
   if (!gameStarted) {
     e.stopPropagation();
@@ -267,6 +275,7 @@ function updateHighScore() {
   if (currentScore > highScore) {
     highScore = currentScore;
     highScoreText.textContent = highScore.toString().padStart(3, "0");
+    localStorage.setItem("snakeHighScore", highScore);
   }
   highScoreText.style.display = "block";
 }
