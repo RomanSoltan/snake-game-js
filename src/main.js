@@ -15,6 +15,8 @@ let gameInterval;
 let gameSpeedDelay = 800;
 let gameStarted = false;
 let isPaused = false;
+let touchStartX = 0;
+let touchStartY = 0;
 
 // Draw game map, snake, food
 function draw() {
@@ -109,6 +111,7 @@ function startGame() {
   isPaused = false;
   instructionText.style.display = "none";
   logo.style.display = "none";
+
   gameInterval = setInterval(() => {
     move();
     checkCollision();
@@ -128,6 +131,7 @@ function togglePause() {
   } else {
     isPaused = false;
     instructionText.style.display = "none";
+
     gameInterval = setInterval(() => {
       move();
       checkCollision();
@@ -144,7 +148,7 @@ function handleKeyPress(e) {
     return;
   }
 
-  //// Start game on space
+  // Start game on space
   if ((!gameStarted && e.code === "Space") || (!gameStarted && e.key === " ")) {
     startGame();
     return;
@@ -175,6 +179,33 @@ board.addEventListener("click", e => {
   if (!gameStarted) {
     e.stopPropagation();
     startGame();
+  }
+});
+
+// Handle touch start (finger touches screen)
+board.addEventListener("touchstart", e => {
+  const touch = e.touches[0];
+  touchStartX = touch.clientX;
+  touchStartY = touch.clientY;
+});
+
+// Handle touch end (finger lifted)
+board.addEventListener("touchend", e => {
+  if (isPaused || !gameStarted) return;
+
+  const touch = e.changedTouches[0];
+  const dx = touch.clientX - touchStartX;
+  const dy = touch.clientY - touchStartY;
+
+  // Detect swipe direction
+  if (Math.abs(dx) > Math.abs(dy)) {
+    // Horizontal swipe
+    if (dx > 0 && direction !== "left") direction = "right";
+    if (dx < 0 && direction !== "right") direction = "left";
+  } else {
+    // Vertical swipe
+    if (dy > 0 && direction !== "up") direction = "down";
+    if (dy < 0 && direction !== "down") direction = "up";
   }
 });
 
@@ -225,6 +256,7 @@ function stopGame() {
   clearInterval(gameInterval);
   gameStarted = false;
   isPaused = false;
+  instructionText.textContent = "Press spacebar to start the game";
   instructionText.style.display = "block";
   logo.style.display = "block";
 }
